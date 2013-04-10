@@ -1,62 +1,81 @@
 class CCS { 
-  int xOffset;
-  int yOffset;
-  int xMax;
-  int yMax;
+  int xMin; // minimum X value possible
+  int yMin; // minimum Y value possible
+  int xMax; // maximum X value possible
+  int yMax; // maximum Y value possible
+  float xTrans;
+  float yTrans;
   String xLabel; 
   String yLabel;
-  int margin;  
 
-  CCS(int vXOffset, int vYOffset, int vXMax, int vYMax, String vXLabel, String vYLabel) { 
-    xOffset = vXOffset;
-    yOffset = vYOffset; 
-    xMax = vXMax;
-    yMax = vYMax;
+  CCS(String vXLabel, String vYLabel) { 
+    xMin = round(-height);
+    yMin = round(-width); 
+    xMax = round(height);
+    yMax = round(width);
     xLabel = vXLabel; 
     yLabel = vYLabel;
   } 
 
-  void display() { 
+  void display() {
+    if (xMin > 0) { 
+      xTrans = 0; 
+    } 
+    else {    
+      xTrans = width * (abs(xMin / float(abs(xMin)+abs(xMax))));
+    }
+    if (yMin > 0) { 
+      yTrans = 0; 
+    }
+    else { 
+      yTrans = height * (abs(yMax / float(abs(yMin)+abs(yMax))));
+    }
+    
+    pushMatrix();
+    translate(xTrans, yTrans);
+    
     // draw the axes
-    line(xOffset, 0, xOffset, height); 
-    line(xOffset, yOffset, width, yOffset); 
+    line(-width, 0, width, 0); // x axis
+    line(0, -height, 0, height); // y axis
 
-    textSize(12);
-    // label the x axis  
-    text("0", (xOffset/2)-5, yOffset);
-    text(yMax, (xOffset/2)-10, height-yOffset);
-    text(xLabel, xOffset/4, (height/2));
+    scale(width/float(xMax-xMin), -height/float(yMax-yMin)); 
 
-    // label the y axis
-    text("0", xOffset+5, yOffset+((height-yOffset)/2));
-    text(xMax, width-xOffset, yOffset+((height-yOffset)/2));
-    text(yLabel, (width/2)-xOffset, yOffset+((height-yOffset)/2));
+    // let's put some values on the axes
+    pushMatrix();
+    scale(1/(width/float(xMax-xMin)), 1/(-height/float(yMax-yMin)));
+    textAlign(RIGHT, TOP);
+    textSize(16);
+    text(xMax, (xMax*width/float(xMax-xMin)), 0);
+    text(yMax, 0, (yMax*-height/float(yMax-yMin)));
+    textAlign(LEFT, TOP);
+    text(xMin, (xMin*width/float(xMax-xMin)), 0);
+    textAlign(RIGHT, BOTTOM);
+    text(yMin, 0, (yMin*-height/float(yMax-yMin)));
+    popMatrix(); 
+    popMatrix(); 
   }
 
-  void plotPoint(int xCoord, int yCoord) { 
-    int realXCoord = round(map(xCoord, 0, xMax, xOffset, width-xOffset)); 
-    int realYCoord = round(map(yCoord, 0, yMax, yOffset, height-yOffset)); 
-    point(realXCoord, realYCoord);
+  void plotPoint(int x, int y) {
+    pushMatrix();
+    translate(xTrans, yTrans);
+    scale(width/float(xMax-xMin), -height/float(yMax-yMin)); 
+    point(x, y);
+    popMatrix();
   }
 
   void plotLine(int x1, int y1, int x2, int y2) {
-    int realX1 = round(map(x1, 0, xMax, xOffset, width-xOffset)); 
-    int realY1 = round(map(y1, 0, yMax, yOffset, height-yOffset)); 
-    int realX2 = round(map(x2, 0, xMax, xOffset, width-xOffset)); 
-    int realY2 = round(map(y2, 0, yMax, yOffset, height-yOffset)); 
-    line(realX1, realY1, realX2, realY2); 
+    pushMatrix();
+    translate(xTrans, yTrans);
+    scale(width/float(xMax-xMin), -height/float(yMax-yMin)); 
+    line(x1, y1, x2, y2);
+    popMatrix();
   }
 
-  void plotBar (int x1, int y1, int x2, int y2) {
-      int realX1 = round(map(x1, 0, xMax, xOffset, width-xOffset)); 
-      int realY1 = round(map(y1, 0, yMax, yOffset, height-yOffset)); 
-      int realX2 = round(map(x2, 0, xMax, xOffset, width-xOffset)); 
-      int realY2 = round(map(y2, 0, yMax, yOffset, height-yOffset)); 
-      if (y1 > 0) { 
-        rect(realX1, realY1, Math.abs(realX2-realX1), Math.abs(realY1-yOffset));
-      }
-      else { 
-        rect(realX1, yOffset, Math.abs(realX2-realX1), Math.abs(realY1-yOffset));
-      }
-  }
+  void plotBar(int x, int y, int barWidth) { 
+    pushMatrix();
+    translate(xTrans, yTrans);
+    scale(width/float(xMax-xMin), -height/float(yMax-yMin)); 
+    rect(x, 0, barWidth, y); 
+    popMatrix();
+  } 
 }
