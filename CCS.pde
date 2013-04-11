@@ -64,12 +64,12 @@ class CCS {
     scale(1/(xScale*zoomLevel), 1/(yScale*zoomLevel)); // temporarily undo the scaling, for text rendering reason
     textAlign(RIGHT, TOP);
     textSize(16);
-    text(xMax, (xMax*xScale), 0);
-    text(yMax, 0, (yMax*yScale));
+    text(round(xMax/zoomLevel), (xMax*xScale), 0);
     textAlign(LEFT, TOP);
-    text(xMin, (xMin*xScale), 0);
-    textAlign(RIGHT, BOTTOM);
-    text(yMin, 0, (yMin*yScale));
+    text(round(xMin/zoomLevel), (xMin*xScale), 0);
+    text(round(yMax/zoomLevel), 0, (yMax*yScale));
+    textAlign(LEFT, BOTTOM);
+    text(round(yMin/zoomLevel), 0, (yMin*yScale));
     popMatrix(); 
     popMatrix(); 
   }

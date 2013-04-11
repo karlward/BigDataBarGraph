@@ -31,14 +31,15 @@ void draw () {
     ccs.plotBar(r.startPos, round(r.dataValue), (r.endPos-r.startPos));
   }  
 
+  // show the current (x,y) position in the top right corner
   int xPos, yPos;
-  xPos = round((mouseX - ccs.xTrans) / ccs.xScale);
-  yPos = round((mouseY - ccs.yTrans) / ccs.yScale);
+  xPos = round((mouseX - ccs.xTrans) / ccs.xScale / ccs.zoomLevel);
+  yPos = round((mouseY - ccs.yTrans) / ccs.yScale / ccs.zoomLevel);
   textAlign(RIGHT, TOP); 
   String position = "(" + xPos + "," + yPos + ")"; 
   fill(255,0,0); 
   text(position, width, 0);
-  fill(255);
+  fill(255, 0, 0);
   ccs.plotPoint(ccs.zoomX, ccs.zoomY);
   if (mousePressed) { 
     ccs.zoomX = xPos;
