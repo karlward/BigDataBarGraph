@@ -5,7 +5,7 @@ void setup () {
   size(800,800, P2D); 
   background(0);
   ccs = new CCS("count", "chromosome position"); 
-  wig = new WIG("L2-1_pm_mm-t1000.wig"); 
+  wig = new WIG("L2-1_pm_mm.wig"); 
   wig.read();
 } 
 
