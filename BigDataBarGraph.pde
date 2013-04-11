@@ -2,7 +2,7 @@ CCS ccs;
 WIG wig; 
 
 void setup () { 
-  size(800,800, P2D); 
+  size(800,800); 
   background(0);
   ccs = new CCS("count", "chromosome position"); 
   wig = new WIG("L2-1_pm_mm.wig"); 
