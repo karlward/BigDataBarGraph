@@ -3,8 +3,18 @@ class CCS {
   int yMin; // minimum Y value possible
   int xMax; // maximum X value possible
   int yMax; // maximum Y value possible
-  float xTrans;
-  float yTrans;
+
+  // we will use translate() to center the grid in the window
+  float xTrans; // amount of x translation
+  float yTrans; // amount of y translation
+  
+  // we will use scale() for two reasons: 
+  //  1. to allow large x and y values to fit into the window
+  //  2. to flip y values so positive y values are above negative y values
+  float xScale; 
+  float yScale; 
+
+  // label each axis (unimplemented)
   String xLabel; 
   String yLabel;
 
@@ -30,6 +40,8 @@ class CCS {
     else { 
       yTrans = height * (abs(yMax / float(abs(yMin)+abs(yMax))));
     }
+    xScale = width/float(xMax-xMin);
+    yScale = -height/float(yMax-yMin); 
     
     pushMatrix();
     translate(xTrans, yTrans);
@@ -38,19 +50,19 @@ class CCS {
     line(-width, 0, width, 0); // x axis
     line(0, -height, 0, height); // y axis
 
-    scale(width/float(xMax-xMin), -height/float(yMax-yMin)); 
+    scale(xScale, yScale); 
 
     // let's put some values on the axes
     pushMatrix();
-    scale(1/(width/float(xMax-xMin)), 1/(-height/float(yMax-yMin)));
+    scale(1/xScale, 1/yScale); // temporarily undo the scaling, for text rendering reason
     textAlign(RIGHT, TOP);
     textSize(16);
-    text(xMax, (xMax*width/float(xMax-xMin)), 0);
-    text(yMax, 0, (yMax*-height/float(yMax-yMin)));
+    text(xMax, (xMax*xScale), 0);
+    text(yMax, 0, (yMax*yScale));
     textAlign(LEFT, TOP);
-    text(xMin, (xMin*width/float(xMax-xMin)), 0);
+    text(xMin, (xMin*xScale), 0);
     textAlign(RIGHT, BOTTOM);
-    text(yMin, 0, (yMin*-height/float(yMax-yMin)));
+    text(yMin, 0, (yMin*yScale));
     popMatrix(); 
     popMatrix(); 
   }
@@ -58,7 +70,7 @@ class CCS {
   void plotPoint(int x, int y) {
     pushMatrix();
     translate(xTrans, yTrans);
-    scale(width/float(xMax-xMin), -height/float(yMax-yMin)); 
+    scale(xScale, yScale); 
     point(x, y);
     popMatrix();
   }
@@ -66,7 +78,7 @@ class CCS {
   void plotLine(int x1, int y1, int x2, int y2) {
     pushMatrix();
     translate(xTrans, yTrans);
-    scale(width/float(xMax-xMin), -height/float(yMax-yMin)); 
+    scale(xScale, yScale); 
     line(x1, y1, x2, y2);
     popMatrix();
   }
@@ -74,7 +86,7 @@ class CCS {
   void plotBar(int x, int y, int barWidth) { 
     pushMatrix();
     translate(xTrans, yTrans);
-    scale(width/float(xMax-xMin), -height/float(yMax-yMin)); 
+    scale(xScale, yScale); 
     rect(x, 0, barWidth, y); 
     popMatrix();
   } 

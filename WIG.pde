@@ -42,6 +42,8 @@ class WIG {
         }
       } 
     } catch (IOException e) { 
+      print("cannot open file "); 
+      println(filename); 
       e.printStackTrace(); 
     } 
   }
