@@ -39,5 +39,17 @@ void draw () {
   fill(255,0,0); 
   text(position, width, 0);
   fill(255);
+  ccs.plotPoint(ccs.zoomX, ccs.zoomY);
+  if (mousePressed) { 
+    ccs.zoomX = xPos;
+    ccs.zoomY = yPos;
+    fill(255, 0, 0);  
+  }
+  if (keyPressed && key == '+') { 
+    ccs.zoomIn(ccs.zoomX, ccs.zoomY);
+  }
+  else if (keyPressed && key == '-') { 
+    ccs.zoomOut();
+  }
 }
 
