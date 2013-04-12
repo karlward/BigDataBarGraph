@@ -20,68 +20,69 @@ class CCS {
   String xLabel; 
   String yLabel;
 
-  CCS(String vXLabel, String vYLabel) { 
-    xMin = round(-height);
-    yMin = round(-width); 
-    xMax = round(height);
-    yMax = round(width);
+  CCS(String vXLabel, String vYLabel, PGraphics vPg) { 
+    pg = vPg; 
+    xMin = round(-pg.height);
+    yMin = round(-pg.width); 
+    xMax = round(pg.height);
+    yMax = round(pg.width);
     xLabel = vXLabel; 
     yLabel = vYLabel;
     zoomLevel = 1;
   } 
 
   void display() {  
-    xTrans = width * (abs(xMin / float(abs(xMin)+abs(xMax))));
-    yTrans = height * (abs(yMax / float(abs(yMin)+abs(yMax))));
-    xScale = width/float(xMax-xMin);
-    yScale = -height/float(yMax-yMin); 
+    xTrans = pg.width * (abs(xMin / float(abs(xMin)+abs(xMax))));
+    yTrans = pg.height * (abs(yMax / float(abs(yMin)+abs(yMax))));
+    xScale = pg.width/float(xMax-xMin);
+    yScale = -pg.height/float(yMax-yMin); 
     
-    pushMatrix();
-    translate(xTrans, yTrans);
+    pg.pushMatrix();
+    pg.translate(xTrans, yTrans);
     
     // draw the axes
-    line(-width, 0, width, 0); // x axis
-    line(0, -height, 0, height); // y axis
+    pg.line(-pg.width, 0, pg.width, 0); // x axis
+    pg.line(0, -pg.height, 0, pg.height); // y axis
 
-    scale(xScale*zoomLevel, yScale*zoomLevel); 
+    pg.scale(xScale*zoomLevel, yScale*zoomLevel); 
 
     // let's put some values on the axes
-    pushMatrix();
-    scale(1/(xScale*zoomLevel), 1/(yScale*zoomLevel)); // temporarily undo the scaling, for text rendering reason
-    textAlign(RIGHT, TOP);
-    textSize(16);
-    text(round(xMax/zoomLevel), (xMax*xScale), 0);
-    textAlign(LEFT, TOP);
-    text(round(xMin/zoomLevel), (xMin*xScale), 0);
-    text(round(yMax/zoomLevel), 0, (yMax*yScale));
-    textAlign(LEFT, BOTTOM);
-    text(round(yMin/zoomLevel), 0, (yMin*yScale));
-    popMatrix(); 
-    popMatrix(); 
+    pg.pushMatrix();
+    pg.scale(1/(xScale*zoomLevel), 1/(yScale*zoomLevel)); // temporarily undo the scaling, for text rendering reason
+    pg.textAlign(RIGHT, TOP);
+    pg.textSize(16);
+    pg.text(round(xMax/zoomLevel), (xMax*xScale), 0);
+    pg.textAlign(LEFT, TOP);
+    pg.text(round(xMin/zoomLevel), (xMin*xScale), 0);
+    pg.text(round(yMax/zoomLevel), 0, (yMax*yScale));
+    pg.textAlign(LEFT, BOTTOM);
+    pg.text(round(yMin/zoomLevel), 0, (yMin*yScale));
+    pg.popMatrix(); 
+    pg.popMatrix(); 
   }
 
   void plotPoint(int x, int y) {
-    pushMatrix();
-    translate(xTrans, yTrans);
-    scale(xScale*zoomLevel, yScale*zoomLevel); 
-    point(x, y);
-    popMatrix();
+    pg.pushMatrix();
+    pg.translate(xTrans, yTrans);
+    pg.scale(xScale*zoomLevel, yScale*zoomLevel); 
+    pg.point(x, y);
+    pg.popMatrix();
   }
 
   void plotLine(int x1, int y1, int x2, int y2) {
-    pushMatrix();
-    translate(xTrans, yTrans);
-    scale(xScale*zoomLevel, yScale*zoomLevel); 
-    line(x1, y1, x2, y2);
-    popMatrix();
+    pg.pushMatrix();
+    pg.translate(xTrans, yTrans);
+    pg.scale(xScale*zoomLevel, yScale*zoomLevel); 
+    pg.line(x1, y1, x2, y2);
+    pg.popMatrix();
   }
 
   void plotBar(int x, int y, int barWidth) { 
-    pushMatrix();
-    translate(xTrans, yTrans);
-    scale(xScale*zoomLevel, yScale*zoomLevel); 
-    rect(x, 0, barWidth, y); 
-    popMatrix();
+    pg.pushMatrix();
+    pg.translate(xTrans, yTrans);
+    pg.scale(xScale*zoomLevel, yScale*zoomLevel); 
+    pg.rect(x, 0, barWidth, y); 
+    pg.popMatrix();
   } 
   
   void zoomIn() {  
