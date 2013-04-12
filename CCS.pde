@@ -19,6 +19,8 @@ class CCS {
   // label each axis (unimplemented)
   String xLabel; 
   String yLabel;
+  
+  PGraphics pg; 
 
   CCS(String vXLabel, String vYLabel, PGraphics vPg) { 
     pg = vPg; 

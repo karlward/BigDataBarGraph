@@ -1,6 +1,6 @@
 CCS ccs; 
 WIG wig; 
-PGraphics pg; // offscreen PGraphics window
+PGraphics offScreenPg; // offscreen PGraphics window
 boolean needToDraw = true;
 boolean offScreenDrawing = false; 
 
@@ -8,26 +8,32 @@ void setup () {
   size(800, 800); 
   frameRate(30);
 
-  pg = createGraphics(800, 800); 
-  ccs = new CCS("expression level", "chromosome position", pg); 
-  wig = new WIG("L2-1_pm_mm-t1000000.wig"); 
+  offScreenPg = createGraphics(800, 800); 
+  ccs = new CCS("expression level", "chromosome position", offScreenPg); 
+  wig = new WIG("L2-1_pm_mm.wig"); 
   wig.read();
 } 
 
 void draw () { 
-  loadPixels(); 
-  if (needToDraw == true) {
-    pg.loadPixels();
+  if (needToDraw == true) { 
+    loadPixels(); 
     thread("offScreen"); // do difficult stuff in a thread (e.g. render the pg object) 
+    offScreenPg.loadPixels();
+    arrayCopy(offScreenPg.pixels, pixels); 
+    updatePixels();
     needToDraw = false;
   }
-  if (keyPressed && ((key == '+') || (key == '-'))) { // interpret key press as a refresh command 
+  if (keyPressed) { // interpret key press as a refresh command 
     needToDraw = true;
   }
-  arrayCopy(pg.pixels, pixels); 
-  updatePixels();
+
+//  arrayCopy(offScreenPg.pixels, pixels); 
+  //updatePixels();
 
   // show the current (x,y) position in the top right corner
+  fill(0);
+  rect(width-120, 0, 120, 20);  
+  fill(255);
   int xPos, yPos;
   xPos = round((mouseX - ccs.xTrans) / ccs.xScale / ccs.zoomLevel);
   yPos = round((mouseY - ccs.yTrans) / ccs.yScale / ccs.zoomLevel);
@@ -41,10 +47,11 @@ void draw () {
 synchronized void offScreen() { 
   if (offScreenDrawing == false) { 
     offScreenDrawing = true; 
-    pg.beginDraw();
-    pg.background(0); 
-    pg.stroke(255); 
-    pg.fill(255);
+    offScreenPg.loadPixels();
+    offScreenPg.beginDraw();
+    offScreenPg.background(0); 
+    offScreenPg.stroke(255); 
+    offScreenPg.fill(255);
     ccs.display(); 
     for (int i=0; i < wig.size(); i++) { 
       WIGRecord r = wig.getRecord(i); 
@@ -69,7 +76,8 @@ synchronized void offScreen() {
     else if (keyPressed && key == '-') { 
       ccs.zoomOut();
     }
-    pg.endDraw(); 
+    offScreenPg.endDraw(); 
+    
     offScreenDrawing = false;
   }
 }
