@@ -15,8 +15,6 @@ class CCS {
   float yScale; 
   
   int zoomLevel; // how zoomed in we are (1 is fully zoomed out, higher values are more zoomed in)
-  int zoomX; // x value for center of current zoom focus
-  int zoomY; // y values for center of current zoom focus
 
   // label each axis (unimplemented)
   String xLabel; 
@@ -30,8 +28,6 @@ class CCS {
     xLabel = vXLabel; 
     yLabel = vYLabel;
     zoomLevel = 1;
-    zoomX = 0; 
-    zoomY = 0;
   } 
 
   void display() {  
@@ -89,7 +85,6 @@ class CCS {
   } 
   
   void zoomIn() {  
-    println("zooming in on (" + zoomX + "," + zoomY + ")");
     if (zoomLevel <= 1000) { 
       zoomLevel = zoomLevel + 1; 
     }

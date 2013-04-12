@@ -40,11 +40,6 @@ void draw () {
   fill(255,0,0); 
   text(position, width, 0);
   fill(255, 0, 0);
-  ccs.plotPoint(ccs.zoomX, ccs.zoomY);
-  if (mousePressed) { 
-    ccs.zoomX = xPos;
-    ccs.zoomY = yPos;  
-  }
   if (keyPressed && key == '+') { 
     ccs.zoomIn();
   }
