@@ -89,18 +89,7 @@ class CCS {
   } 
   
   void zoomIn() {  
-
     println("zooming in on (" + zoomX + "," + zoomY + ")");
-    // find the middle of the Processing window 
-    int centerX = round(width / 2); 
-    int centerY = round(height / 2); 
-    
-    // convert the CCS grid (x, y) values to Processing (x,y) values
-    int realX = round((zoomX * xScale) + xTrans);
-    int realY = round((zoomY * yScale) + yTrans);
-    
-    translate(centerX-realX, centerY-realY);
-    
     if (zoomLevel <= 1000) { 
       zoomLevel = zoomLevel + 1; 
     }
