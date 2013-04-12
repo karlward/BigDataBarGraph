@@ -35,18 +35,18 @@ class CCS {
   } 
 
   void display() {
-    if (xMin > 0) { 
-      xTrans = 0; 
-    } 
-    else {    
+//    if (xMin > 0) { 
+//      xTrans = 0; 
+//    } 
+//    else {   
       xTrans = width * (abs(xMin / float(abs(xMin)+abs(xMax))));
-    }
-    if (yMin > 0) { 
-      yTrans = 0; 
-    }
-    else { 
+//    }
+//    if (yMin > 0) { 
+//      yTrans = 0; 
+//    }
+//    else { 
       yTrans = height * (abs(yMax / float(abs(yMin)+abs(yMax))));
-    }
+//    }
     xScale = width/float(xMax-xMin);
     yScale = -height/float(yMax-yMin); 
     
@@ -56,6 +56,8 @@ class CCS {
     // draw the axes
     line(-width, 0, width, 0); // x axis
     line(0, -height, 0, height); // y axis
+
+    //translate(zoomX, zoomY); // FIXME: not the right way to recenter
 
     scale(xScale*zoomLevel, yScale*zoomLevel); 
 
@@ -98,16 +100,16 @@ class CCS {
     popMatrix();
   } 
   
-  void zoomIn(int x, int y) {  
+  void zoomIn() {  
 
-    println("zooming in on (" + x + "," + y + ")");
+    println("zooming in on (" + zoomX + "," + zoomY + ")");
     // find the middle of the Processing window 
     int centerX = round(width / 2); 
     int centerY = round(height / 2); 
     
     // convert the CCS grid (x, y) values to Processing (x,y) values
-    int realX = round((x * xScale) + xTrans);
-    int realY = round((y * yScale) + yTrans);
+    int realX = round((zoomX * xScale) + xTrans);
+    int realY = round((zoomY * yScale) + yTrans);
     
     translate(centerX-realX, centerY-realY);
     

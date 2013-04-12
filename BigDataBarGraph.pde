@@ -43,11 +43,10 @@ void draw () {
   ccs.plotPoint(ccs.zoomX, ccs.zoomY);
   if (mousePressed) { 
     ccs.zoomX = xPos;
-    ccs.zoomY = yPos;
-    fill(255, 0, 0);  
+    ccs.zoomY = yPos;  
   }
   if (keyPressed && key == '+') { 
-    ccs.zoomIn(ccs.zoomX, ccs.zoomY);
+    ccs.zoomIn();
   }
   else if (keyPressed && key == '-') { 
     ccs.zoomOut();
